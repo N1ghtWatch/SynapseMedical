@@ -1,0 +1,31 @@
+{
+	"name": "Dataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DatasetA",
+						"type": "DatasetReference"
+					},
+					"name": "DatasetA"
+				},
+				{
+					"dataset": {
+						"referenceName": "DatasetB",
+						"type": "DatasetReference"
+					},
+					"name": "DatasetB"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "Join1"
+				}
+			],
+			"script": "source(output(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string,\n\t\tColumn_4 as string,\n\t\tColumn_5 as string,\n\t\tColumn_6 as string,\n\t\tColumn_7 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> DatasetA\nsource(output(\n\t\tmarital_status as string,\n\t\tchildren as string,\n\t\tancestry as string,\n\t\tavg_commute as string,\n\t\tdaily_internet_use as string,\n\t\tavailable_vehicles as string,\n\t\tmilitary_service as string,\n\t\tdisease as string,\n\t\t{P. id} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> DatasetB\nDatasetA, DatasetB join(ERROR_FUNCTION('') == ERROR_FUNCTION(''),\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> Join1"
+		}
+	}
+}
